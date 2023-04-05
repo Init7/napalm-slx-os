@@ -14,11 +14,13 @@
 
 """Tests."""
 
+import json
 import unittest
 
-from napalm_slx_os import slx_os
 from napalm.base.test.base import TestConfigNetworkDriver, TestGettersNetworkDriver
-import json
+from napalm.base.test.double import BaseTestDouble
+
+from napalm_slx_os import slx_os
 
 
 class TestConfigDriver(unittest.TestCase, TestConfigNetworkDriver):
@@ -64,7 +66,7 @@ class TestGetterDriver(unittest.TestCase, TestGettersNetworkDriver):
             cls.device.open()
 
 
-class FakeDevice:
+class FakeDevice(BaseTestDouble):
     """Test double."""
 
     @staticmethod
@@ -78,3 +80,9 @@ class FakeDevice:
         """Return the content of a file."""
         with open(filename) as data_file:
             return data_file.read()
+
+    def send_command(self, command, **kwargs):
+        filename = "{}.txt".format(self.sanitize_text(command))
+        full_path = self.find_file(filename)
+        result = self.read_txt_file(full_path)
+        return str(result)

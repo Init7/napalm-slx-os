@@ -1,0 +1,15 @@
+SLX-OS Operating System Version: 20.3.2
+Copyright (c) 1995-2023 Extreme Networks, Inc.
+Firmware name:      20.3.2f
+Build Time:         13:10:39 Mar 31, 2022
+Install Time:       23:36:26 Jun 13, 2022
+Kernel:             4.14.67
+Control Processor:  Intel(R) Xeon(R) CPU D-1527 @ 2.20GHz,  4 cores
+Microcode Version:  0x7000017
+Memory Size:        System Total: 31653 MB
+System Uptime:      295days 13hrs 15mins 5secs
+
+Name     Primary/Secondary Versions
+------------------------------------------
+SLX-OS   20.3.2f
+         20.3.2f

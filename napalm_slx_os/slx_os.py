@@ -18,12 +18,15 @@ Napalm driver for slx_os.
 
 Read https://napalm.readthedocs.io for more information.
 """
+import re
 import socket
-from typing import List, Dict, Union, Any
+from typing import List, Dict, Union, Any, Optional
 
-from napalm.base import NetworkDriver
+from napalm.base import NetworkDriver, models
 from napalm.base.exceptions import ConnectionClosedException
+from napalm.base.helpers import textfsm_extractor
 from napalm.base.netmiko_helpers import netmiko_args
+from netmiko import BaseConnection
 
 
 class SLXOSDriver(NetworkDriver):
@@ -31,7 +34,7 @@ class SLXOSDriver(NetworkDriver):
 
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
         """Constructor."""
-        self.device = None
+        self.device: Optional[BaseConnection] = None
         self.hostname = hostname
         self.username = username
         self.password = password
@@ -82,3 +85,43 @@ class SLXOSDriver(NetworkDriver):
             cli_output[command] = output
 
         return cli_output
+
+    def is_alive(self) -> models.AliveDict:
+        return {
+            'is_alive': self.device.remote_conn.transport.is_active()
+        }
+
+    def get_facts(self) -> models.FactsDict:
+
+        show_ver = self._send_command('show version')
+        show_ver_data = textfsm_extractor(self, 'show_version', show_ver)
+
+        uptime = self._parse_uptime(show_ver_data[0]['uptime'])
+
+        return {
+            'os_version': show_ver_data[0]['firmware_name'],
+            'uptime': uptime,
+            'interface_list': [],
+            # TODO: Implement this
+            'vendor': '',
+            'serial_number': '',
+            'model': '',
+            'hostname': '',
+            'fqdn': '',
+        }
+
+    def _parse_uptime(self, uptime_string: str) -> float:
+        regexes = [
+            (r'(\d+)days', 86400),
+            (r'(\d+)hrs', 3600),
+            (r'(\d+)mins', 60),
+            (r'(\d+)secs', 1),
+        ]
+
+        uptime = 0.
+        for regex, multiplier in regexes:
+            match = re.search(regex, uptime_string)
+            if match:
+                uptime += int(match.group(1)) * multiplier
+
+        return uptime

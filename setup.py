@@ -1,10 +1,8 @@
 """setup.py file."""
 
-import uuid
-
 from setuptools import setup, find_packages
 
-__author__ = 'David Barroso <dbarrosop@dravetech.com>'
+__author__ = 'Jens Vogler <vogler@init7.net>'
 
 with open("requirements.txt", "r") as fs:
     reqs = [r for r in fs.read().splitlines() if (len(r) > 0 and not r.startswith("#"))]
@@ -13,9 +11,9 @@ setup(
     name="napalm-slx_os",
     version="0.1.0",
     packages=find_packages(),
-    author="David Barroso",
-    author_email="dbarrosop@dravetech.com",
-    description="Network Automation and Programmability Abstraction Layer with Multivendor support",
+    author="Jens Vogler",
+    author_email="vogler@init7.net",
+    description="SLX-OS Driver for NAPALM",
     classifiers=[
         'Topic :: Utilities',
          'Programming Language :: Python',

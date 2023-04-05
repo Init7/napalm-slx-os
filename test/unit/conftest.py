@@ -2,6 +2,7 @@
 from builtins import super
 
 import pytest
+from napalm.base import models
 from napalm.base.test import conftest as parent_conftest
 
 from napalm.base.test.double import BaseTestDouble
@@ -37,9 +38,24 @@ class PatchedSLXOSDriver(slx_os.SLXOSDriver):
         self.patched_attrs = ['device']
         self.device = FakeSLXOSDevice()
 
+    def open(self):
+        pass
+
+    def close(self):
+        pass
+
+    def is_alive(self) -> models.AliveDict:
+        return {'is_alive': True}
+
 
 class FakeSLXOSDevice(BaseTestDouble):
     """slx_os device test double."""
+
+    def send_command(self, command, **kwargs):
+        filename = "{}.txt".format(self.sanitize_text(command))
+        full_path = self.find_file(filename)
+        result = self.read_txt_file(full_path)
+        return str(result)
 
     def run_commands(self, command_list, encoding='json'):
         """Fake run_commands."""
