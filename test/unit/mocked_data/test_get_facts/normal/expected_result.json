@@ -3,8 +3,8 @@
   "uptime": 25535705.0,
   "interface_list": [],
   "vendor": "",
-  "serial_number": "",
-  "model": "",
-  "hostname": "",
+  "serial_number": "RED0A00C00T",
+  "model": "BR-SLX9640",
+  "hostname": "foo.example",
   "fqdn": ""
 }

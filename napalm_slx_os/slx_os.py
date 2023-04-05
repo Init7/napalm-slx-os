@@ -66,6 +66,9 @@ class SLXOSDriver(NetworkDriver):
         except (socket.error, EOFError) as e:
             raise ConnectionClosedException(str(e))
 
+    def _send_and_parse_command(self, command: str, template: str):
+        return textfsm_extractor(self, template, self._send_command(command))
+
     @staticmethod
     def _send_command_postprocess(output):
         """
@@ -93,20 +96,23 @@ class SLXOSDriver(NetworkDriver):
 
     def get_facts(self) -> models.FactsDict:
 
-        show_ver = self._send_command('show version')
-        show_ver_data = textfsm_extractor(self, 'show_version', show_ver)
+        version_data = self._send_and_parse_command('show version', 'show_version')[0]
+        chassis_data = self._send_and_parse_command('show inventory chassis', 'show_inventory_chassis')[0]
 
-        uptime = self._parse_uptime(show_ver_data[0]['uptime'])
+        uptime = self._parse_uptime(version_data['uptime'])
+
+        hostname = self._send_command('show running-config switch-attributes host-name')
+        hostname = hostname.split('\n')[0].split(' ')[-1].strip()
 
         return {
-            'os_version': show_ver_data[0]['firmware_name'],
+            'os_version': version_data['firmware_name'],
             'uptime': uptime,
             'interface_list': [],
-            # TODO: Implement this
+            'serial_number': chassis_data['sn'],
+            'model': chassis_data['sid'],
+            'hostname': hostname,
+            # Couldn't find a reliable way to get these fields
             'vendor': '',
-            'serial_number': '',
-            'model': '',
-            'hostname': '',
             'fqdn': '',
         }
 

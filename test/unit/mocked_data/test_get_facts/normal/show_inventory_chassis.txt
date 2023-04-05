@@ -1,0 +1,5 @@
+
+
+NAME: Chassis  		DESCR:System Chassis
+SID:BR-SLX9640     	SwitchType:4001
+PN:99-9999999-99  	SN:RED0A00C00T
