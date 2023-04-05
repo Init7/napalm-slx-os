@@ -18,18 +18,15 @@ Napalm driver for slx_os.
 
 Read https://napalm.readthedocs.io for more information.
 """
+import socket
+from typing import List, Dict, Union, Any
 
 from napalm.base import NetworkDriver
-from napalm.base.exceptions import (
-    ConnectionException,
-    SessionLockedException,
-    MergeConfigException,
-    ReplaceConfigException,
-    CommandErrorException,
-)
+from napalm.base.exceptions import ConnectionClosedException
+from napalm.base.netmiko_helpers import netmiko_args
 
 
-class slx_osDriver(NetworkDriver):
+class SLXOSDriver(NetworkDriver):
     """Napalm driver for slx_os."""
 
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
@@ -43,11 +40,45 @@ class slx_osDriver(NetworkDriver):
         if optional_args is None:
             optional_args = {}
 
-    def open(self):
-        """Implement the NAPALM method open (mandatory)"""
-        pass
+        self.netmiko_optional_args = netmiko_args(optional_args)
 
+    def open(self):
+        """Open connection to device"""
+        self.device = self._netmiko_open(
+            device_type='extreme_slx',
+            netmiko_optional_args=self.netmiko_optional_args
+        )
 
     def close(self):
-        """Implement the NAPALM method close (mandatory)"""
-        pass
+        """Close connection to device"""
+        self._netmiko_close()
+
+    def _send_command(self, command):
+        """Wrapper for self.device.send.command().
+        If command is a list will iterate through commands until valid command.
+        """
+        try:
+            output = self.device.send_command(command)
+            return self._send_command_postprocess(output)
+        except (socket.error, EOFError) as e:
+            raise ConnectionClosedException(str(e))
+
+    @staticmethod
+    def _send_command_postprocess(output):
+        """
+        Cleanup actions on send_command() for NAPALM getters.
+        """
+        return output.strip()
+
+    def cli(self, commands: List[str], encoding: str = "text") -> Dict[str, Union[str, Dict[str, Any]]]:
+        if encoding not in ("text",):
+            raise NotImplementedError("%s is not a supported encoding" % encoding)
+
+        cli_output = {}
+
+        for command in commands:
+            output = self._send_command(command)
+            cli_output.setdefault(command, {})
+            cli_output[command] = output
+
+        return cli_output

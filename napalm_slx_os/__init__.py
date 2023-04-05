@@ -13,6 +13,6 @@
 # the License.
 
 """napalm-slx_os package."""
-from napalm_slx_os.slx_os import slx_osDriver  # noqa
+from napalm_slx_os.slx_os import SLXOSDriver  # noqa
 
-__all__ = ('slx_osDriver',)
+__all__ = ('SLXOSDriver',)

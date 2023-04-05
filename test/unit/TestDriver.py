@@ -33,8 +33,8 @@ class TestConfigDriver(unittest.TestCase, TestConfigNetworkDriver):
         cls.vendor = 'slx_os'
 
         optional_args = {'port': 12443, }
-        cls.device = slx_os.slx_osDriver(hostname, username, password, timeout=60,
-                                             optional_args=optional_args)
+        cls.device = slx_os.SLXOSDriver(hostname, username, password, timeout=60,
+                                        optional_args=optional_args)
         cls.device.open()
 
         cls.device.load_replace_candidate(filename='%s/initial.conf' % cls.vendor)
@@ -55,8 +55,8 @@ class TestGetterDriver(unittest.TestCase, TestGettersNetworkDriver):
         cls.vendor = 'slx_os'
 
         optional_args = {'port': 12443, }
-        cls.device = slx_os.slx_osDriver(hostname, username, password, timeout=60,
-                                             optional_args=optional_args)
+        cls.device = slx_os.SLXOSDriver(hostname, username, password, timeout=60,
+                                        optional_args=optional_args)
 
         if cls.mock:
             cls.device.device = FakeDevice()
