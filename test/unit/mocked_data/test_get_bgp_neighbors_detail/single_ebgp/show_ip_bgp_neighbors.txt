@@ -1,0 +1,50 @@
+    '+': Data in InQueue '>': Data in OutQueue '-': Clearing
+    '*': Update Policy 'c': Group change 'p': Group change Pending
+    'r': Restarting 's': Stale '^': Up before Restart '<': EOR waiting
+
+1   IP Address: 80.249.208.82, AS: 8426 (EBGP), RouterID: 212.61.142.11, VRF: default-vrf
+       Description: Sample Description (AS8426 / SAMPLE)
+    State: ESTABLISHED, Time: 13d15h52m49s, KeepAliveTime: 60, HoldTime: 180
+       KeepAliveTimer Expire in 36 seconds, HoldTimer Expire in 172 seconds
+    Minimal Route Advertisement Interval: 0 seconds
+       PeerGroup: AMSIX
+       MD5 Password: jejhhi83
+       NextHopSelf: yes
+       RemovePrivateAs: : yes
+       SoftInboundReconfiguration: yes
+       RefreshCapability: Received
+       GracefulRestartCapability: Received
+           Restart Time 120 sec, Restart bit 0
+           afi/safi 1/1, Forwarding bit 0
+    Address Family : IPV4 Unicast
+       SendCommunity: yes
+       MaximumPrefixLimit: 1000
+       Prefix-list: (in) BOGONv4  (out) BOGONv4
+       Route-map: (in) AMSIXin  (out) AMSIXout
+    Messages:    Open        Update      KeepAlive   Notification   Refresh-Req
+       Sent    : 395         73627       475850      1              0
+       Received: 30          1605        508114      365            0
+    Last Update Time: NLRI              Withdraw                NLRI                Withdraw
+                  Tx: 0h22m40s          0h23m19s            Rx: 1d21h29m16s         1d21h30m5s
+    Last Connection Reset Reason:Rcv Notification
+    Notification Sent:     Hold Timer Expired
+    Notification Received: Cease/Connection Rejected
+    Neighbor NLRI Negotiation:
+      Peer Negotiated IPV4  unicast  capability
+      Peer configured for IPV4 unicast  Routes
+    Neighbor ipv6 MPLS Label Capability Negotiation:
+    Neighbor AS4 Capability Negotiation:
+      Peer Negotiated AS4  capability
+      Peer configured for AS4  capability
+    Outbound Policy Group:
+        routemap: AMSIXout
+        prefix-list: BOGONv4
+       ID: 3, Use Count: 314
+       Last update time was 2236829 sec ago
+    BFD:Disabled
+       Byte Sent:   572514, Received: 442581
+       Local host:  80.249.208.210, Local  Port: 179
+       Remote host: 80.249.208.82, Remote Port: 44455
+    Maintenance Mode : Disabled
+    G-Shut: Disabled
+

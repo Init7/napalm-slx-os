@@ -1,0 +1,23 @@
+{
+  "global": {
+    "router_id": "5.180.132.183",
+    "peers": {
+      "80.249.208.82": {
+        "local_as": 13030,
+        "remote_as": 8426,
+        "remote_id": "212.61.142.11",
+        "is_up": true,
+        "is_enabled": true,
+        "description": "Sample Description (AS8426 / SAMPLE)",
+        "uptime": 0,
+        "address_family": {
+          "ipv4": {
+            "received_prefixes": 25,
+            "accepted_prefixes": 12,
+            "sent_prefixes": 14
+          }
+        }
+      }
+    }
+  }
+}
