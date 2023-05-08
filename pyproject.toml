@@ -1,0 +1,43 @@
+[project]
+name = "napalm-slx-os"
+version = "0.1.1"
+authors = [
+    { name = "Jens Vogler", email = "vogler@init7.net" }
+]
+description = "SLX-OS Driver for NAPALM"
+readme = "README.md"
+classifiers = [
+    "Topic :: Utilities",
+    "Programming Language :: Python :: 3",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+]
+
+dependencies = [
+    "napalm>=2.0.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Init7/napalm-slx-os"
+
+[project.optional-dependencies]
+tests = [
+    "coveralls",
+    "ddt",
+    "flake8-import-order",
+    "pytest==7.2.2",
+    "pytest-cov==4.0.0",
+    "pytest-json==0.4.0",
+    "pytest-pythonpath",
+    "pylama==8.4.1",
+    "mock",
+    "tox",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["napalm_slx_os"]
