@@ -20,6 +20,7 @@ Read https://napalm.readthedocs.io for more information.
 """
 import dataclasses
 import ipaddress
+import json
 import re
 import socket
 from collections import defaultdict
@@ -312,6 +313,7 @@ class SLXOSDriver(NetworkDriver):
         )
 
     def get_bgp_neighbors_detail(self, neighbor_address: str = "") -> Dict[str, models.PeerDetailsDict]:
+        # TODO: Respect neighbor_address filter
 
         bgp_detail = defaultdict(lambda: defaultdict(lambda: []))
 
@@ -364,6 +366,9 @@ class SLXOSDriver(NetworkDriver):
 
             bgp_detail[neighbor.vrf_name][neighbor.asn].append(details)
 
+        # Make clean copy of all values to avoid pickling issues
+        bgp_detail = json.loads(json.dumps(bgp_detail))
+
         return bgp_detail
 
     def get_bgp_neighbors(self) -> Dict[str, models.BGPStateNeighborsPerVRFDict]:
@@ -400,5 +405,8 @@ class SLXOSDriver(NetworkDriver):
                     }
                 }
             }
+
+        # Make clean copy of all values to avoid pickling issues
+        output = json.loads(json.dumps(output))
 
         return output
