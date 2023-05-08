@@ -1,0 +1,23 @@
+{
+  "global": {
+    "router_id": "5.180.132.183",
+    "peers": {
+      "2001:1620:1000::236": {
+        "local_as": 13030,
+        "remote_as": 6908,
+        "remote_id": "62.149.48.24",
+        "is_up": true,
+        "is_enabled": true,
+        "description": "PNI Datahop (AS6908 / AS-DATAHOP)",
+        "uptime": 0,
+        "address_family": {
+          "ipv6": {
+            "received_prefixes": 13,
+            "accepted_prefixes": 12,
+            "sent_prefixes": 294
+          }
+        }
+      }
+    }
+  }
+}

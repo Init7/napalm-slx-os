@@ -1,0 +1,24 @@
+  BGP4 Summary
+  Router ID: 5.180.132.183   Local AS Number: 13030
+  Confederation Identifier: not configured
+  Confederation Peers:
+  Maximum Number of IP ECMP Paths Supported for Load Sharing: 1
+  Number of Neighbors Configured: 370, UP: 318
+  Number of Routes Installed: 854069, Uses 141775454 bytes
+  Number of Routes Advertising to All Neighbors: 8825346 (640071 entries), Uses 48645396 bytes
+  Number of Attribute Entries Installed: 322052, Uses 61511932 bytes
+  d: Dynamically created based on a listen range command
+  Dynamically created neighbors: 0/100(max)
+  A: Auto Discovered Neighbors using LLDP
+  Auto Neighbors Count: 0
+  '+': Data in InQueue '>': Data in OutQueue '-': Clearing
+  '*': Update Policy 'c': Group change 'p': Group change Pending
+  'r': Restarting 's': Stale '^': Up before Restart '<': EOR waiting
+  '$': Learning-Phase (for Delayed Route Calculation)
+  '#': RIB-in Phase
+  Neighbor Address  AS#         State     Time     Rt:Accepted Filtered Sent     ToSend
+  2001:1620:1000::162
+                    41095       ESTAB   328d13h20m    399      1        294      0
+  2001:1620:1000::236
+                    6908        ESTAB   328d13h20m    12       1        294      0
+  2a00:5641:bb::150 13030       CONN    328d13h23m    0        0        0        93205

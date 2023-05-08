@@ -1,0 +1,45 @@
+    Total number of BGP Neighbors: 370
+    '+': Data in InQueue '>': Data in OutQueue '-': Clearing
+    '*': Update Policy 'c': Group change 'p': Group change Pending
+    'r': Restarting 's': Stale '^': Up before Restart '<': EOR waiting
+
+1   IP Address: 2001:1620:1000::236, AS: 6908 (EBGP), RouterID: 62.149.48.24, VRF: default-vrf
+       Description: PNI Datahop (AS6908 / AS-DATAHOP)
+    State: ESTABLISHED, Time: 328d13h43m2s, KeepAliveTime: 30, HoldTime: 90
+       KeepAliveTimer Expire in 15 seconds, HoldTimer Expire in 74 seconds
+    Minimal Route Advertisement Interval: 0 seconds
+       NextHopSelf: yes
+       RemovePrivateAs: : yes
+       SoftInboundReconfiguration: yes
+       RefreshCapability: Received
+       GracefulRestartCapability: Received
+           Restart Time 120 sec, Restart bit 0
+           afi/safi 2/1, Forwarding bit 0
+    Address Family : IPV6 Unicast
+       SendCommunity: yes
+       MaximumPrefixLimit: 50
+       Route-map: (in) DATAHOPv6in  (out) DATAHOPv6out
+    Messages:    Open        Update      KeepAlive   Notification   Refresh-Req
+       Sent    : 1           806049      975052      0              0
+       Received: 1           101         979227      0              0
+    Last Update Time: NLRI              Withdraw                NLRI                Withdraw
+                  Tx: 0h1m37s           0h3m31s             Rx: 4d18h40m31s         4d19h6m6s
+    Last Connection Reset Reason:Unknown
+    Notification Sent:     Unspecified
+    Notification Received: Unspecified
+    Neighbor NLRI Negotiation:
+      Peer Negotiated IPV6 unicast  capability
+      Peer configured for IPV6 unicast  Routes
+    Neighbor ipv6 MPLS Label Capability Negotiation:
+    Neighbor AS4 Capability Negotiation:
+      Peer Negotiated AS4  capability
+      Peer configured for AS4  capability
+    Outbound Policy Group:
+        routemap: DATAHOPv6out
+       ID: 11, Use Count: 1
+    BFD:Disabled
+       Byte Sent:   119716530, Received: 18613550
+       Local host:  2001:1620:1000::235, Local  Port: 179
+       Remote host: 2001:1620:1000::236, Remote Port: 63056
+    Maintenance Mode : Disabled
+    G-Shut: Disabled

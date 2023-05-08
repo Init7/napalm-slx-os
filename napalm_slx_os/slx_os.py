@@ -242,12 +242,14 @@ class SLXOSDriver(NetworkDriver):
     def _get_bgp_data(self) -> _BGPData:
 
         bgp_neighbors = self._send_and_parse_command('show ip bgp neighbors', 'show_ip_bgp_neighbors')
+        bgp_v6_neighbors = self._send_and_parse_command('show ipv6 bgp neighbors', 'show_ipv6_bgp_neighbors')
         bgp_summary = self._send_and_parse_command('show ip bgp summary', 'show_ip_bgp_summary')
+        bgp_v6_summary = self._send_and_parse_command('show ipv6 bgp summary', 'show_ipv6_bgp_summary')
 
         summary_base_data = bgp_summary[0]
 
         neighbors_list: List[_BGPNeighborDetail] = []
-        for entry in bgp_neighbors:
+        for entry in bgp_neighbors + bgp_v6_neighbors:
             neighbors_list.append(_BGPNeighborDetail(
                 ip_address=napalm.base.helpers.ip(entry['ipaddress']),
                 asn=napalm.base.helpers.as_number(entry['asn']),
@@ -279,7 +281,10 @@ class SLXOSDriver(NetworkDriver):
             ))
 
         summary_list: List[_BGPNeighborSummary] = []
-        for entry in bgp_summary:
+        for entry in bgp_summary + bgp_v6_summary:
+            if not entry['neighboraddress'] or entry['neighboraddress'] == '':
+                continue
+
             summary_list.append(_BGPNeighborSummary(
                 address=napalm.base.helpers.ip(entry['neighboraddress']),
                 asn=napalm.base.helpers.as_number(entry['asn']),
@@ -293,7 +298,7 @@ class SLXOSDriver(NetworkDriver):
 
         neighbors_map = {}
         for entry in neighbors_list:
-            neighbors_map[entry.router_id] = entry
+            neighbors_map[entry.ip_address] = entry
 
         summary_map = {}
         for entry in summary_list:

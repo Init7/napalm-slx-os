@@ -1,0 +1,4 @@
+    Total number of BGP Neighbors: 370
+    '+': Data in InQueue '>': Data in OutQueue '-': Clearing
+    '*': Update Policy 'c': Group change 'p': Group change Pending
+    'r': Restarting 's': Stale '^': Up before Restart '<': EOR waiting
