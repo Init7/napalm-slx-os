@@ -169,6 +169,9 @@ class SLXOSDriver(NetworkDriver):
 
         self.netmiko_optional_args = netmiko_args(optional_args)
 
+        self._candidate_config: Optional[str] = None
+        self._config_is_merge: bool = False
+
     def open(self):
         """Open connection to device"""
         self.device = self._netmiko_open(
@@ -180,7 +183,7 @@ class SLXOSDriver(NetworkDriver):
         """Close connection to device"""
         self._netmiko_close()
 
-    def _send_command(self, command):
+    def _send_command(self, command: str) -> str:
         """Wrapper for self.device.send.command().
         If command is a list will iterate through commands until valid command.
         """
@@ -369,7 +372,14 @@ class SLXOSDriver(NetworkDriver):
         # Make clean copy of all values to avoid pickling issues
         bgp_detail = json.loads(json.dumps(bgp_detail))
 
-        return bgp_detail
+        # Convert asn keys to int
+        result_bgp_detail = {}
+        for vrf_name, vrf_data in bgp_detail.items():
+            result_bgp_detail[vrf_name] = {}
+            for asn, asn_data in vrf_data.items():
+                result_bgp_detail[vrf_name][int(asn)] = asn_data
+
+        return result_bgp_detail
 
     def get_bgp_neighbors(self) -> Dict[str, models.BGPStateNeighborsPerVRFDict]:
         bgp_data = self._get_bgp_data()
@@ -410,3 +420,51 @@ class SLXOSDriver(NetworkDriver):
         output = json.loads(json.dumps(output))
 
         return output
+
+    def load_merge_candidate(self, filename: Optional[str] = None, config: Optional[str] = None) -> None:
+        if filename is not None:
+            with open(filename, 'r') as f:
+                config_str = f.read()
+        elif config is not None:
+            config_str = config
+        else:
+            raise ValueError("filename or config must be provided")
+
+        self._candidate_config = config_str
+        self._config_is_merge = True
+
+    def discard_config(self) -> None:
+        self._candidate_config = None
+
+    def compare_config(self) -> str:
+        return 'no good mechanism exists to compare the config'
+
+    def commit_config(self, message: str = "", revert_in: Optional[int] = None) -> None:
+        if self._candidate_config is None:
+            raise ValueError("No config to commit")
+
+        if not self._config_is_merge:
+            raise ValueError("Only merge configs are supported")
+
+        self.device.send_config_set(config_commands=self._candidate_config.splitlines())
+        self._candidate_config = None
+
+    def get_config(
+            self, retrieve: str = "all", full: bool = False, sanitized: bool = False
+    ) -> models.ConfigDict:
+        # Caveat: sanitized is not supported
+
+        config_data = {
+            'running': '',
+            'startup': '',
+            'candidate': '',
+        }
+
+        all_suffix = " all" if full else ""
+
+        if retrieve in ("all", "running"):
+            config_data["running"] = self._send_command(f"show running-config{all_suffix}")
+        if retrieve in ("all", "startup"):
+            config_data["startup"] = self._send_command(f"show startup-config{all_suffix}")
+
+        return config_data
