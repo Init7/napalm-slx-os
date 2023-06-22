@@ -35,6 +35,12 @@ from netmiko import BaseConnection
 
 
 @dataclasses.dataclass
+class _VRF:
+    name: str
+    id: int
+
+
+@dataclasses.dataclass
 class _BGPNeighborDetail:
     ip_address: str
     asn: int
@@ -468,3 +474,36 @@ class SLXOSDriver(NetworkDriver):
             config_data["startup"] = self._send_command(f"show startup-config{all_suffix}")
 
         return config_data
+
+    def slx_get_vrfs(self) -> List[_VRF]:
+        vrfs = []
+        vrf_data = self._send_and_parse_command("show vrf", 'show_vrf')
+        for vrf_entry in vrf_data:
+            vrfs.append(_VRF(name=vrf_entry['vrfname'], id=int(vrf_entry['vrfid'])))
+        return vrfs
+
+    def get_arp_table(self, vrf: str = "") -> List[models.ARPTableDict]:
+        if vrf == '':
+            vrfs_to_check = [vrf.name for vrf in self.slx_get_vrfs()]
+        else:
+            vrfs_to_check = [vrf]
+
+        arp_table: List[models.ARPTableDict] = []
+        for vrf_name in vrfs_to_check:
+            arp_data = self._send_and_parse_command(f"show arp vrf {vrf_name}", 'show_arp')
+            for arp_entry in arp_data:
+                # convert age from hh:mm:ss to seconds
+                age = arp_entry['age']
+                age_parts = age.split(':')
+                age_seconds = int(age_parts[0]) * 3600 + int(age_parts[1]) * 60 + int(age_parts[2])
+
+                interface = arp_entry['l2interface'].replace(' ', '') + '|' + arp_entry['l3interface'].replace(' ', '')
+
+                arp_table.append({
+                    'interface': interface,
+                    'mac': arp_entry['macaddress'],
+                    'ip': arp_entry['address'],
+                    'age': age_seconds,
+                })
+
+        return arp_table
