@@ -1,3 +1,6 @@
+[![PyPI](https://img.shields.io/pypi/v/napalm-slx-os.svg)](https://pypi.python.org/pypi/napalm)
+[![PyPI versions](https://img.shields.io/pypi/pyversions/napalm-slx-os.svg)](https://pypi.python.org/pypi/napalm)
+
 # napalm-slx_os
 
 SLX-OS driver for [NAPALM](https://github.com/napalm-automation/napalm)
