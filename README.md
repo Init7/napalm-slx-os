@@ -6,6 +6,14 @@ Tested with the following SLX-OS versions:
 
 - 20.3.2e
 
+Status: **ALPHA**  
+Most complex parts have been done, most of the getters should follow in upcoming weeks.
+
+## Background
+
+This driver has been launched to make the integration with [PeeringManager](https://github.com/peering-manager/peering-manager)
+possible. The necessary functions for this have been implemented and can be used.
+
 ## Function Support Overview
 
 ### Configuration Support
@@ -59,6 +67,6 @@ executed when calling `commit_config()`
 | ping                      |        |
 | traceroute                |        |
 
-(1) - Only default VRF supported for now
+(1) - Only default VRF supported for now, all VRF support coming soon
 
 (2) - `sanitized` option not supported
